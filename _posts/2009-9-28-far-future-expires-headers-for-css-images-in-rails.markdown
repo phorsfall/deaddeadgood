@@ -24,7 +24,9 @@ class StylesheetsController < ApplicationController
 end
 {% endhighlight %}
 
-<pre><code class="ruby">map.connect "/stylesheets/:action.css", :controller =&gt; "stylesheets", :format =&gt; "css"</code></pre>
+{% highlight ruby %}
+map.connect "/stylesheets/:action.css", :controller => "stylesheets", :format => "css"
+{% endhighlight %}
 
 <p>This is just about as simple as you can imagine. We're using page caching to cache the stylesheet to disk, once rendered it will be served like any other static asset.</p>
 
@@ -58,11 +60,13 @@ mv public/stylesheets/iphone.css app/views/stylesheets/iphone.css.erb</code></pr
 
 <p>Assuming you're using Capistrano, a simple solution is to add a task that fetches the stylesheets from the Rails host after each deploy. Adding this to <code>deploy.rb</code> will do the trick:</p>
 
-<pre><code class="ruby">task :prime_cache, :roles => :app do
-  run &lt;&lt;-CMD
+{% highlight ruby %}
+task :prime_cache, :roles => :app do
+  run <<-CMD
     wget --spider http://#{domain}/stylesheets/application.css;
     wget --spider http://#{domain}/stylesheets/iphone.css
   CMD
 end
 
-after "deploy", :prime_cache</code></pre>
+after "deploy", :prime_cache
+{% endhighlight %}
