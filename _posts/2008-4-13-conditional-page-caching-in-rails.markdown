@@ -1,0 +1,29 @@
+--- 
+layout: post
+title: Conditional Page Caching in Rails
+---
+<p class="update">Update 20/04/2008: <a href="http://deaddeadgood.com/2008/4/20/contributing-to-rails">I submitted a patch and this is now in edge Rails</a></p>
+
+<p>When I <a href="http://deaddeadgood.com/2008/3/27/really-simple-blog-badges-in-rails-2-0">created the JSON feed for my deadtre.es blog badge</a>, one thing I didn't take care of was caching. As the contents of the feed will always be the same for a given URL no matter which user makes the request, it's a prime candidate for page caching. All I need to do is add <code>caches_page :index</code> to my controller, and Rails takes care of caching the index action for me. However, there's a problem here as the HTML format index action will also be cached, and unlike the JSON feed this does vary based on the logged on user (if you're looking at your own bookmarks you get edit and delete links for example) and so it isn't as suitable for page caching. What I'd really like to do here is to specify a condition that will be evaluated before the page is cached, much as the <a href="http://www.noobkit.com/show/ruby/rails/rails-edge/actionpack-edge/actioncontroller/sessionmanagement/classmethods/session.html">session </a> method does.</p>
+
+<pre><code class="ruby">caches_page :index, :if => Proc.new { |c| c.request.format.json? }
+</code></pre>
+
+<p>Unfortunately, a quick look at <a href="http://www.noobkit.com/show/ruby/rails/rails-edge/actionpack-edge/actioncontroller/caching/pages/classmethods/caches_page.html">the docs for caches_page</a> tells me that it doesn't support this. But looking at the source code I can see that <code>caches_page</code> is really just a nice shortcut for setting up an <code>after_filter</code> to perform the caching. So, instead of calling <code>caches_page</code> I could do this directly myself, and check the format of the page requested so that only the JSON feed is cached:</p>
+
+<pre><code class="ruby">after_filter(:only => :index) { |c| c.cache_page if c.request.format.json? }</code></pre>
+
+<p>Now, although this works, it doesn't check that caching is enable (as <code>caches_page</code> does) and it's also not that pretty. Instead, I decided to override <code>caches_page</code> by dropping the following in my ApplicationController.</p>
+
+<pre><code class="ruby">def self.caches_page(*actions)
+  return unless perform_caching
+  options = actions.extract_options!
+  after_filter(:only => actions) { |c| c.cache_page if options[:if].nil? or options[:if].call(c) }
+end
+</code></pre>
+
+<p>This is pretty similar to the original <code>caches_page</code> except that it evaluates any <code>:if</code> proc passed in before caching the page. Now, I can now call <code>caches_page</code> with the syntax I originally wanted:</p>
+
+<pre><code class="ruby">caches_page :index, :if => Proc.new { |c| c.request.format.json? }</code></pre>
+
+<p>Job done.</p>

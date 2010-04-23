@@ -1,0 +1,12 @@
+--- 
+layout: post
+title: Installing Passenger 2.1.1 Beta
+---
+<p>Update: <a href="http://blog.phusion.nl/2009/03/13/phusion-passenger-212-final-released/">Passenger 2.1.2 (final) has now been released.</a></p>
+<p>The current stable release of <a href="http://rails.lighthouseapp.com/projects/8994/tickets/1957-sessions-break-in-23-with-mongrel">Passenger (2.0.6) isn't compatible with Rails 2.3 because of recent changes in Rack</a>. In the app I'm working on, this manifested itself as cookies not been set correctly, making it impossible to log out of the site. The good news is that <a href="http://blog.phusion.nl/2009/03/01/phusion-passenger-211-beta-released-thanks-sponsors/">the latest beta of Passenger</a> includes support for Rails 2.3, you can install it (on OS X) as follows:</p>
+
+<pre><code>curl -O http://phusion-passenger.googlecode.com/files/passenger-2.1.1.gem
+sudo gem install passenger-2.1.1
+sudo passenger-install-apache2-module</code></pre>
+
+<p>Follow the on-screen instructions on updating your config, restart Apache and you're done.</p>

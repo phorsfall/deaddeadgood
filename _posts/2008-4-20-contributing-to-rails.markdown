@@ -1,0 +1,17 @@
+--- 
+layout: post
+title: Contributing to Rails
+---
+<p>Encouraged by <a href="http://deaddeadgood.com/2008/4/13/conditional-page-caching-in-rails#comments">a couple of kind comments</a> <a href="http://rails.lighthouseapp.com/projects/8994/tickets/25-allow-if-option-for-caches_page">I submitted a patch</a> for the change I wrote about in my <a href="http://deaddeadgood.com/2008/4/13/conditional-page-caching-in-rails">previous post</a>, and <a href="http://github.com/rails/rails/commit/14a40804a29a57ad05ca6bffbe1e5334089593a9">as of yesterday</a> you can now do something like this in edge Rails.</p>
+
+<pre>
+<code class="ruby">caches_page :index, :if => Proc.new { |c| !c.request.format.json? }</code>
+</pre>
+
+<p>I'd not used <a href="http://lighthouseapp.com/">Lighthouse</a> before and I'm still getting my head around everything <a href="http://git.or.cz/">Git</a>. If you're in a similar position, you might find these links useful too:</p>
+
+<ul>
+<li><a href="http://www.tpope.net/rails-git-best-practices">Best Practices for Contributing to Rails with Git</a></li>
+<li><a href="http://www.thechrisoshow.com/2008/4/13/five-rails-tips/">Five tips for contributing to Rails</a></li>
+<li><a href="http://rails.lighthouseapp.com/projects/8994/ticket-guidelines">Ticket Guidelines</a></li>
+</ul>

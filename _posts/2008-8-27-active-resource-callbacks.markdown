@@ -1,0 +1,34 @@
+--- 
+layout: post
+title: Active Resource Callbacks
+---
+<p>It looks like <a href="http://github.com/rails/rails/tree/master/activemodel">work is still on-going</a> to <a href="http://weblog.techno-weenie.net/2008/1/21/random-rails-tidbits">extract functionality common to Active Record and Active Resource into a new Active Model library</a>. Excellent. But I wanted to add a couple of callbacks to Active Resource and I wanted to do it quickly. Thankfully, <a href="http://joshpeek.com/">someone much smarter than me</a> has already <a href="http://github.com/rails/rails/commit/aae37bb4f7edd6a1820e420a60560369c6064f33">extracted callbacks from Active Record</a>, so getting something working was pretty straight forward.</p>
+
+<pre><code class="ruby">module ActiveResource
+  module Callbacks
+    CALLBACKS = %w( after_save after_destroy )
+    
+    def self.included(base)
+      [:save, :destroy].each do |method|
+        base.send :alias_method_chain, method, :callbacks
+      end
+      
+      base.send :include, ActiveSupport::Callbacks
+      base.define_callbacks *CALLBACKS
+    end
+    
+    def save_with_callbacks
+      returning save_without_callbacks do
+        run_callbacks(:after_save) unless new?
+      end
+    end
+    
+    def destroy_with_callbacks
+      returning destroy_without_callbacks do
+        run_callbacks(:after_destroy)
+      end
+    end
+  end
+end
+
+ActiveResource::Base.send :include, ActiveResource::Callbacks</code></pre>

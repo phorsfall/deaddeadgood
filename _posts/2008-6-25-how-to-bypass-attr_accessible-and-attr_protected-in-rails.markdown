@@ -1,0 +1,13 @@
+--- 
+layout: post
+title: How to Bypass attr_accessible and attr_protected in Rails
+---
+<p>Mass assignment in Rails is super handy and saves heaps of code, especially in your controllers. As everyone knows however, <a href="http://railscasts.com/episodes/26">hackers love mass assignment</a> so you really need to use <code>attr_accessible</code> or <code>attr_protected</code> to protect your models.</p>
+
+<p>But what happens if you want to mass assign model attributes which are otherwise protected? It would be simple enough to create your own method to do this, but if you take a look at <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M001374">the source</a> you'll see that Rails already has it covered. Here's the method signature for <code>ActiveRecord::Base#attributes=</code>:</p>
+
+<pre><code class="ruby">def attributes=(new_attributes, guard_protected_attributes = true)</code></pre>
+
+<p>That optional second parameter lets you bypass <code>attr_accessible</code> and <code>attr_protected</code> exactly as we'd like. But how do we call this? Well, you use <code>send</code>.</p>
+
+<pre><code class="ruby">@model.send :attributes=, attributes, false</code></pre>

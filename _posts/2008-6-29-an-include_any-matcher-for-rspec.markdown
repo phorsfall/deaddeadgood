@@ -1,0 +1,55 @@
+--- 
+layout: post
+title: An include_any Matcher for RSpec
+---
+<p>Writing custom <a href="http://rspec.rubyforge.org/rdoc/classes/Spec/Matchers.html">RSpec expectation matchers</a> is a great way to enhance the readability of your specifications. As an example, here's a simple matcher to check whether a collection contains any of the given items. An example will make things clearer:</p>
+
+<pre>
+<code class="ruby"># Passing example
+odds  = [1,3,5,7,9]
+evens = [2,4,6,8]
+odds.should_not include_any(*evens)</code>
+</pre>
+
+<p>One thing to note is that <code>include_any</code> expects multiple arguments rather than a collection, hence the splat. Here's the code:</p>
+
+<pre>
+<code class="ruby">module Spec
+  module Matchers
+    def include_any(*args)
+      IncludeAny.new(*args)
+    end
+  
+    class IncludeAny
+      def initialize(*args)
+        @args = args
+      end
+    
+      def matches?(target)
+        @target = target
+        @target.include_any?(*@args)
+      end
+    
+      def failure_message
+        "expected #{@target.inspect} to include one or more elements from #{@args.inspect}"
+      end
+    
+      def negative_failure_message
+        "expected #{@target.inspect} not to include any elements from #{@args.inspect}"
+      end
+    end
+  end
+end</code>
+</pre>
+
+<p>This is about as trivial as a custom matcher gets. All of the work is done by the <code>include_any?</code> method, which doesn't actually exist as part of the <a href="http://www.ruby-doc.org/core/">core Ruby API</a>. In fact it's a simple extension to <code>Enumerable</code> that I think I originally borrowed from <a href="http://merbivore.com/">Merb</a>. Put the following in <code>config/initializers/core_extensions.rb</code> or similar to use it in a <a href="http://www.rubyonrails.org/">Rails</a> app.</p>
+
+<pre>
+<code class="ruby">module Enumerable
+  def include_any?(*args)
+    args.any? { |arg| self.include?(arg) }
+  end
+end</code>
+</pre>
+
+<p>Which custom matchers are you using?</p>

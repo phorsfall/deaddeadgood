@@ -1,0 +1,64 @@
+/* Used for inline code snippets */
+#content code {
+	font: normal 12px "bitstream vera sans mono", monaco "lucida console", "courier new", courier, serif;
+	background-color: #FFFFCC;
+	border-bottom: 1px dotted #FFCC66;
+}
+
+/* Used for code blocks */
+#content pre code {
+	font-size: 14px;
+  color: #FFF;
+	background-color: #000;
+	border-bottom: none;
+}
+
+/** RUBY / JAVASCRIPT **/
+#content code span.comment {
+	color: #BD48B3;
+}
+
+#content code span.string {
+	color: #99FF00;
+}
+
+#content code span.brackets {
+	
+}
+
+#content code span.symbol {
+	color: #6BCFF7;
+}
+
+#content code span.keywords {
+	color: #FF8400;
+}
+
+#content code span.erb {
+	background: #333;
+}
+
+#content code span.symbol {
+      color: #07DFFC;
+}
+
+/** HTML **/
+#content code.html span.tag {
+	color: #fff;
+}
+
+#content code.html span.attribute {
+	color: #FFD500;
+}
+
+#content code.html span.string {
+	color: #99FF00;
+}
+
+#content code.html span.comment {
+	color: #999;
+}
+
+#content code.html span.doctype {
+	color: #D7FF80;
+}

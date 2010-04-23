@@ -1,0 +1,53 @@
+/*--------------------------------------------------------------
+ Local.css
+ Add any personal changes that you'd like to make to the theme
+ in this template.
+ --------------------------------------------------------------*/
+
+#header h1 {
+  font-family: "trebuchet ms", helvetica,arial,verdana,sans-serif; 
+  letter-spacing: -4px;
+}
+
+#header a:link,
+#header a:visited,
+#header a:active {
+	color: #98000B;
+}
+
+#mugshot {
+	padding-bottom: 12px;
+}
+
+#content p {
+	line-height: 16px;
+}
+
+#content .hentry .vcard, 
+#content .hentry .published {
+	margin-top: 4px;
+}
+
+#content .hentry .published {
+	margin-left: 0px;
+}
+
+#sidebar #books ul {
+	margin: 0pt 0pt 0.6em;
+}
+
+#sidebar #books li a:hover {
+	background: transparent;
+}
+
+#sidebar #elsewhere li {
+	display: inline;
+}
+
+#sidebar .badge img {
+	margin-top: 1.3em;
+}
+
+#sidebar .badge a:hover {
+	background: #fff;
+}

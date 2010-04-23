@@ -1,0 +1,39 @@
+--- 
+layout: post
+title: Scaffolding Nested Resources in Rails
+---
+<p>Creating <a href="http://adam.blog.heroku.com/past/2007/12/20/nested_resources_in_rails_2/">nested resources in Rails</a> can be a little bit tedious, particularly if you're using Rspec and its scaffolding. Updating the controller isn't really a problem, but making the specs pass involves a bit too much busy work. And then there are the views to take care of, and their specs, and don't forget the routing specs while you're at it.</p>
+
+<p>Now you might suggest that <a href="http://mr.hamptoncatlin.com/">make_resourceful</a> and <a href="http://jamesgolick.com/resource_controller/rdoc/index.html">resource_controller</a> offer a neat solution to this problem. Well, yes, sometimes. Often though, I find these super controllers tend to be a little too DRY for my tastes, at least on some projects. I'm usually happier starting with some generated code and hacking from there.</p>
+
+<p>So what I'd really like to be able to do is scaffold out the nested resource and its specs. A quick look around Github turned up <a href="http://github.com/jeremyf/rspec_on_rails_nested_scaffold/tree/master">rspec_on_rails_nested_scaffold</a>, a plugin which does just that. It is very nearly perfect for my needs, although <a href="http://github.com/phorsfall/rspec_on_rails_nested_scaffold/tree/master">I have forked it</a> and updated the templates used for views and specs with those from the latest versions of Rails and Rspec respectively.</p>
+
+<p>You can install the plugin like so:</p>
+
+<pre><code>script/plugin install git://github.com/phorsfall/rspec_on_rails_nested_scaffold.git</code></pre>
+
+<p>If you already have a <code class="ruby">Post</code> resource you can create nested <code class="ruby">Comments</code> like this:</p>
+
+<pre><code>script/generate rspec_nested_scaffold Comment --owner=Post post_id:integer body:text</code></pre>
+
+<p>This will generate a <code class="ruby">CommentsController</code> which includes a <code class="ruby">before_filter</code> to load the correct <code class="ruby">Post</code> and has Active Record calls scoped accordingly. You also get views which include the correct links and form actions, along with updated controller, view and routing specs. Before you are finished however, there are a few small things you'll need to do by hand:</p>
+
+<ol>
+<li>Update <code>routes.rb</code>. The generator will add an un-nested <code class="ruby">map.resources</code> for our nested resource. In our example, we'd remove this and add the following:
+<pre><code class="ruby">map.resources :posts, :has_many => :comments</code></pre></li>
+
+<li>Create the Active Record associations in your models.
+<pre><code class="ruby">class Post &lt; ActiveRecord::Base
+  has_many :comments
+end
+
+class Comments &lt; ActiveRecord::Base
+  belongs_to :post
+end</code></pre></li>
+
+<li>If you didn't include a foreign key when you ran the generator, add one to the migration.</li>
+</ol>
+
+<p>With that done, migrate the database and run the specs which should all pass. You now have an app you can go to work on and hopefully you've saved a bit of time along the way.</p>
+
+<p>Thanks to <a href="http://github.com/jeremyf">Jeremy Friesen</a> for putting the original plugin together.</p>

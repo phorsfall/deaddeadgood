@@ -1,0 +1,24 @@
+--- 
+layout: post
+title: Rails I18n Translation Lookup in TextMate
+---
+<p>I've been working on internationalizing a Rails app, and along the way I created a simple command to lookup Rails i18n translation keys from within TextMate. You use it like this:</p>
+
+<ol>
+<li>Highlight a translation key. e.g. <code>'activerecord.errors.messages.inclusion'</code></li>
+<li>Hit Shift-Command-i.</li>
+<li>The relevant translation is shown on a tool tip, in this case "is not included in the list".</li>
+</ol>
+
+<p>As well as simple keys, the command also works with any additional parameters you'd pass to <code>I18n.t</code> when using <a href="http://guides.rails.info/i18n.html#_interpolation">interpolation</a> or the <a href="http://guides.rails.info/i18n.html#_looking_up_translations">alternate translation key scoping syntax</a>. For example highlighting <code>:greater_than, :scope => [:activerecord, :errors, :messages], :count => 100</code> before invoking the command would yield "must be greater than 100" on the tool tip. There's also support for replacing local and instance variables used for interpolation with placeholder strings.</p>
+
+<p><del>Since Sven Fuchs has already started an experimental Rails i18n TextMate bundle <a href="http://github.com/phorsfall/rails-i18n/tree/master">I've forked his rails-i18n repository</a> and added this to it. Here's how to set it up:</del></p>
+
+<p>The command is included in Sven Fuchs' experimental Rails i18n TextMate bundle, here's how to set it up:</p>
+
+<pre><code>git clone git://github.com/svenfuchs/rails-i18n.git
+cp -r rails-i18n/tools/ ~/Library/Application\ Support/TextMate/Bundles/
+# You also need the i18n gem
+sudo gem install mattetti-i18n --source http://gems.github.com</code></pre>
+
+<p>The command has the default locale set to <code>:en</code> and is only loading translations from <code>config/locales/en.yml</code>. If you need to do something different take a look at the command in TextMate's Bundle Editor and you'll see what you need to change to get things working for you.</p>
