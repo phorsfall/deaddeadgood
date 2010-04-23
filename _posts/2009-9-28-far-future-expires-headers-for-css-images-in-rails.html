@@ -18,9 +18,11 @@ permalink: /2009/9/28/far-future-expires-headers-for-css-images-in-rails/
 
 <h3>Create a Stylesheets Controller and a Matching Route</h3>
 
-<pre><code class="ruby">class StylesheetsController &lt; ApplicationController
+{% highlight ruby %}
+class StylesheetsController < ApplicationController
   caches_page :application, :iphone
-end</code></pre>
+end
+{% endhighlight %}
 
 <pre><code class="ruby">map.connect "/stylesheets/:action.css", :controller =&gt; "stylesheets", :format =&gt; "css"</code></pre>
 
