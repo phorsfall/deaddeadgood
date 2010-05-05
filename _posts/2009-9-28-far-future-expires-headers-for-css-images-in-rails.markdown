@@ -14,7 +14,7 @@ permalink: /2009/9/28/far-future-expires-headers-for-css-images-in-rails/
 
 <p>One solution is to instruct the web server to <a href="http://www.dcmanges.com/blog/asset-versioning-in-rails">only add the expires header to requests that do include the asset timestamp</a>. While this might be ok if you only have a few images in your CSS, if most of your images are specified this way then you're still not making the most of the browser's cache which was the whole point of the exercise in the first place.</p>
 
-<p>An alternative solution, and the one we took on <a href="http://nurphy.com">Nurphy</a>, is to use ERB templates to generate your stylesheets, and use the Rails' helpers to get asset timestamps in your CSS. It's dead easy, here's how:</p>
+<p>An alternative solution is to use ERB templates to generate your stylesheets, and use the Rails' helpers to get asset timestamps in your CSS. It's dead easy, here's how:</p>
 
 <h3>Create a Stylesheets Controller and a Matching Route</h3>
 
