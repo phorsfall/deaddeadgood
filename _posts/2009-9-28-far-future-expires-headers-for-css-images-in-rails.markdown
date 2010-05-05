@@ -69,4 +69,5 @@ task :prime_cache, :roles => :app do
 end
 
 after "deploy", :prime_cache
+after "deploy:migrations", :prime_cache
 {% endhighlight %}
